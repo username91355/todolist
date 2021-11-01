@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from '../../redux/toDoListReducer';
+import {FilterValuesType} from '../../redux/reducers/toDoListReducer';
 import {AddItemForm} from "../common/AddItemForm/AddItemForm";
 import {MutableSpan} from "../common/MutableSpan/MutableSpan";
 import IconButton from '@mui/material/IconButton';
@@ -9,7 +9,7 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Paper} from "@mui/material";
-import {TaskType} from "../../redux/taskReducer";
+import {TaskType} from "../../redux/reducers/taskReducer";
 
 type PropsType = {
     toDoListID: string

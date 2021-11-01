@@ -17,10 +17,10 @@ export const createTasksListAC = (title: string, toDoListID: string) => ({type: 
 export const removeTasksListAC = (toDoListID: string) => ({type: REMOVE_TASK_LIST, toDoListID} as const)
 
 //Types
-type StateTasksType = { [key: string]: Array<TaskType> }
+export type StateTasksType = { [key: string]: Array<TaskType> }
 export type TaskType = { id: string, title: string, isDone: boolean }
-type GeneralActionType = AddTuskType | RemoveTaskType | ChangeTaskTitleType | ChangeTaskStatusType | RemoveTasksListType | createTasksListAC
 
+export type GeneralActionType = AddTuskType | RemoveTaskType | ChangeTaskTitleType | ChangeTaskStatusType | RemoveTasksListType | createTasksListAC
 type AddTuskType = ReturnType<typeof addTaskAC>
 type RemoveTaskType = ReturnType<typeof removeTaskAC>
 type ChangeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
@@ -30,7 +30,7 @@ type RemoveTasksListType = ReturnType<typeof removeTasksListAC>
 
 
 //Reducer
-export const taskReducer = (state: StateTasksType, action: GeneralActionType) => {
+export const taskReducer = (state: StateTasksType, action: GeneralActionType): StateTasksType => {
     switch (action.type) {
 
         case ADD_TASK: {

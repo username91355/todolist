@@ -12,14 +12,14 @@ import {
     changeTaskTitleAC,
     changeTaskStatusAC,
     removeTasksListAC, createTasksListAC,
-} from "./redux/taskReducer";
+} from "./redux/reducers/taskReducer";
 import {
     addToDolistAC,
     changeTitleToDoListAC,
     filterTasksInToDoListAC, FilterValuesType,
     removeToDolistAC,
     toDoListReducer, ToDoListType,
-} from "./redux/toDoListReducer";
+} from "./redux/reducers/toDoListReducer";
 
 function App() {
 
@@ -48,9 +48,9 @@ function App() {
     })
 
     function addToDoList(title: string) {
-        let toDoList = v1()
-        dispatchToDoList(addToDolistAC(title, toDoList))
-        dispatchTasks(createTasksListAC(title, toDoList))
+        const toDoListID = v1()
+        dispatchToDoList(addToDolistAC(title, toDoListID))
+        dispatchTasks(createTasksListAC(title, toDoListID))
     }
 
     function removeToDoList(toDoListID: string) {
