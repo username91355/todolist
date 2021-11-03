@@ -1,11 +1,11 @@
 import React, {useState, KeyboardEvent, ChangeEvent} from "react";
 
-type MutableSpan = {
+type MutableSpanType = {
     title: string
     onChangeTitle: (title: string) => void
 }
 
-export const MutableSpan: React.FC<MutableSpan> = ({title, onChangeTitle}) => {
+export const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) => {
 
     const [localTitle, setLocalTitle] = useState('')
     const [readingMode, setReadingMode] = useState<boolean>(true)

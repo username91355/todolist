@@ -1,4 +1,5 @@
 import {v1} from "uuid";
+import {initialStateForTaskReducer} from "./initialStates";
 
 //Action types
 const ADD_TASK = 'ADD_TASK'
@@ -20,17 +21,17 @@ export const removeTasksListAC = (toDoListID: string) => ({type: REMOVE_TASK_LIS
 export type StateTasksType = { [key: string]: Array<TaskType> }
 export type TaskType = { id: string, title: string, isDone: boolean }
 
-export type GeneralActionType = AddTuskType | RemoveTaskType | ChangeTaskTitleType | ChangeTaskStatusType | RemoveTasksListType | createTasksListAC
+export type GeneralActionType = AddTuskType | RemoveTaskType | ChangeTaskTitleType | ChangeTaskStatusType | RemoveTasksListType | CreateTasksListAC
 type AddTuskType = ReturnType<typeof addTaskAC>
 type RemoveTaskType = ReturnType<typeof removeTaskAC>
 type ChangeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
 type ChangeTaskStatusType = ReturnType<typeof changeTaskStatusAC>
-type createTasksListAC = ReturnType<typeof createTasksListAC>
+type CreateTasksListAC = ReturnType<typeof createTasksListAC>
 type RemoveTasksListType = ReturnType<typeof removeTasksListAC>
 
 
 //Reducer
-export const taskReducer = (state: StateTasksType, action: GeneralActionType): StateTasksType => {
+export const taskReducer = (state: StateTasksType = initialStateForTaskReducer, action: GeneralActionType): StateTasksType => {
     switch (action.type) {
 
         case ADD_TASK: {
@@ -50,7 +51,7 @@ export const taskReducer = (state: StateTasksType, action: GeneralActionType): S
         case CHANGE_TASK_TITLE: {
             return {
                 ...state,
-                [action.toDoListID]: state[action.toDoListID].map( (i:TaskType) => i.id !== action.taskId ? {...i, title: action.title} : i )
+                [action.toDoListID]: state[action.toDoListID].map( (i:TaskType) => i.id === action.taskId ? {...i, title: action.title} : i )
             }
         }
 
