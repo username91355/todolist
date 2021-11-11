@@ -1,10 +1,10 @@
 //Initial state
 import {v1} from "uuid";
-import {StateTasksType} from "./taskReducer";
-import {StateToDoListType} from "./toDoListReducer";
+import {StateTasksType} from "./tasks-reducer";
+import {StateToDoListType} from "./todolists-reducer";
 
-const TODOLIST_ID1 = v1()
-const TODOLIST_ID2 = v1()
+export const TODOLIST_ID1 = v1()
+export const TODOLIST_ID2 = v1()
 
 export const initialStateForToDoListReducer: StateToDoListType = [
     {id: TODOLIST_ID1, title: 'Tasks', filter: 'all'},

@@ -2,11 +2,12 @@ import {v1} from "uuid";
 import {
     addTaskAC,
     changeTaskStatusAC,
-    changeTaskTitleAC, createTasksListAC,
-    removeTaskAC, removeTasksListAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    tasksReducer,
     StateTasksType,
-    taskReducer
-} from "./taskReducer";
+} from "./tasks-reducer";
+import {addToDolistAC, removeToDolistAC} from "./todolists-reducer";
 
 test('To do list reducer: Add task', () => {
     const TODOLIST_ID1 = v1()
@@ -27,7 +28,7 @@ test('To do list reducer: Add task', () => {
         ]
     }
 
-    let endState = taskReducer(startState, addTaskAC('New task', TODOLIST_ID2))
+    let endState = tasksReducer(startState, addTaskAC('New task', TODOLIST_ID2))
 
     expect(endState[TODOLIST_ID2].length).toBe(4)
     expect(endState[TODOLIST_ID2][0].title).toBe('New task')
@@ -54,7 +55,7 @@ test('To do list reducer: Remove task ', () => {
         ]
     }
 
-    let endState = taskReducer(startState, removeTaskAC(TASK_ID, TODOLIST_ID1))
+    let endState = tasksReducer(startState, removeTaskAC(TASK_ID, TODOLIST_ID1))
 
     expect(endState[TODOLIST_ID1].length).toBe(4)
     expect(endState[TODOLIST_ID1].some(i => i.title === "GraphQL")).toBe(false)
@@ -81,7 +82,7 @@ test('To do list reducer: Change task title', () => {
         ]
     }
 
-    let endState = taskReducer(startState, changeTaskTitleAC('New title', TODOLIST_ID1, TASK_ID))
+    let endState = tasksReducer(startState, changeTaskTitleAC('New title', TODOLIST_ID1, TASK_ID))
 
     expect(endState[TODOLIST_ID1].length).toBe(5)
     expect(endState[TODOLIST_ID1][4].title).toBe('New title')
@@ -110,7 +111,7 @@ test('To do list reducer: Change task status', () => {
         ]
     }
 
-    let endState = taskReducer(startState, changeTaskStatusAC(TASK_ID, true, TODOLIST_ID1))
+    let endState = tasksReducer(startState, changeTaskStatusAC(TASK_ID, true, TODOLIST_ID1))
 
     expect(endState[TODOLIST_ID1].length).toBe(5)
     expect(endState[TODOLIST_ID1][4].title).toBe("GraphQL")
@@ -121,7 +122,6 @@ test('To do list reducer: Change task status', () => {
 test('To do list reducer: Create tasks list', () => {
     const TODOLIST_ID1 = v1()
     const TODOLIST_ID2 = v1()
-    const TODOLIST_ID3 = v1()
 
     let startState: StateTasksType = {
         [TODOLIST_ID1]: [
@@ -138,10 +138,11 @@ test('To do list reducer: Create tasks list', () => {
         ]
     }
 
-    let endState = taskReducer(startState, createTasksListAC('TITLE', TODOLIST_ID3))
+    let action = addToDolistAC('TITLE')
+    let endState = tasksReducer(startState, action)
 
     expect(Object.keys(endState).length).toBe(3)
-    expect(Object.keys(endState)[2]).toBe(TODOLIST_ID3)
+    expect(Object.keys(endState)[2]).toBe(action.toDoListID)
 })
 
 test('To do list reducer: Remove tasks list', () => {
@@ -163,7 +164,7 @@ test('To do list reducer: Remove tasks list', () => {
         ]
     }
 
-    let endState = taskReducer(startState, removeTasksListAC(TODOLIST_ID1))
+    let endState = tasksReducer(startState, removeToDolistAC(TODOLIST_ID1))
 
     expect(Object.keys(endState).length).toBe(1)
     expect(Object.keys(endState)[0]).toBe(TODOLIST_ID2)

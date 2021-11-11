@@ -1,13 +1,14 @@
 //Action types
-import {initialStateForToDoListReducer} from "./initialStates";
+import { v1 } from "uuid";
+import {initialStateForToDoListReducer} from "./initial-states";
 
-const ADD_TODOLIST = 'ADD_TODOLIST'
-const REMOVE_TODOLIST = 'REMOVE_TODOLIST'
+export const ADD_TODOLIST = 'ADD_TODOLIST'
+export const REMOVE_TODOLIST = 'REMOVE_TODOLIST'
 const CHANGE_TITLE_TODOLIST = 'CHANGE_TITLE_TODOLIST'
 const FILTER_TASKS_IN_TODOLIST = 'FILTER_TASKS_IN_TODOLIST'
 
 //Action Creators
-export const addToDolistAC = (title: string, toDoListID: string) => ({type: ADD_TODOLIST, title, toDoListID} as const)
+export const addToDolistAC = (title: string) => ({type: ADD_TODOLIST, title, toDoListID: v1()} as const)
 export const removeToDolistAC = (toDoListID: string) => ({type: REMOVE_TODOLIST, toDoListID} as const)
 export const changeTitleToDoListAC = (title: string, toDoListID: string) => ({type: CHANGE_TITLE_TODOLIST, title, toDoListID} as const)
 export const filterTasksInToDoListAC = (filter: FilterValuesType, toDoListID: string) => ({type: FILTER_TASKS_IN_TODOLIST, filter, toDoListID} as const)
@@ -18,13 +19,13 @@ export type ToDoListType = { id: string, title: string, filter: FilterValuesType
 export type FilterValuesType = "all" | "active" | "completed";
 
 export type GeneralActionType = AddToDoListType | RemoveToDoListType | ChangeTitleToDoListType | FilterTasksInToDoListType
-type AddToDoListType = ReturnType<typeof addToDolistAC>
-type RemoveToDoListType = ReturnType<typeof removeToDolistAC>
+export type AddToDoListType = ReturnType<typeof addToDolistAC>
+export type RemoveToDoListType = ReturnType<typeof removeToDolistAC>
 type ChangeTitleToDoListType = ReturnType<typeof changeTitleToDoListAC>
 type FilterTasksInToDoListType = ReturnType<typeof filterTasksInToDoListAC>
 
 //Reducer
-export const toDoListReducer = (state: StateToDoListType = initialStateForToDoListReducer, action: GeneralActionType): StateToDoListType => {
+export const todolistsReducer = (state: StateToDoListType = initialStateForToDoListReducer, action: GeneralActionType): StateToDoListType => {
     switch (action.type) {
 
         case ADD_TODOLIST: {

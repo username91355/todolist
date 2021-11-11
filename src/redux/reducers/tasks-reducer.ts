@@ -1,37 +1,32 @@
 import {v1} from "uuid";
-import {initialStateForTaskReducer} from "./initialStates";
+import {initialStateForTaskReducer} from "./initial-states";
+import {ADD_TODOLIST, AddToDoListType, REMOVE_TODOLIST, RemoveToDoListType} from "./todolists-reducer";
 
 //Action types
 const ADD_TASK = 'ADD_TASK'
 const REMOVE_TASK = 'REMOVE_TASK'
 const CHANGE_TASK_TITLE = 'CHANGE_TASK_TITLE'
 const CHANGE_TASK_STATUS = 'CHANGE_TASK_STATUS'
-const CREATE_TASK_LIST = 'CREATE_TASK_LIST'
-const REMOVE_TASK_LIST = 'REMOVE_TASK_LIST'
 
 //Action Creators
 export const addTaskAC = (title:string, toDoListID: string) => ({type: ADD_TASK, title, toDoListID} as const)
 export const removeTaskAC = (taskId: string, toDoListID: string) => ({type: REMOVE_TASK, taskId, toDoListID} as const)
 export const changeTaskTitleAC = (title: string, toDoListID: string, taskId: string) => ({type: CHANGE_TASK_TITLE, title, toDoListID, taskId} as const)
 export const changeTaskStatusAC = (taskId: string, isDone: boolean, toDoListID: string) => ({type: CHANGE_TASK_STATUS, taskId, isDone, toDoListID} as const)
-export const createTasksListAC = (title: string, toDoListID: string) => ({type: CREATE_TASK_LIST, title, toDoListID} as const)
-export const removeTasksListAC = (toDoListID: string) => ({type: REMOVE_TASK_LIST, toDoListID} as const)
+
 
 //Types
 export type StateTasksType = { [key: string]: Array<TaskType> }
 export type TaskType = { id: string, title: string, isDone: boolean }
 
-export type GeneralActionType = AddTuskType | RemoveTaskType | ChangeTaskTitleType | ChangeTaskStatusType | RemoveTasksListType | CreateTasksListAC
+export type GeneralActionType = AddTuskType | RemoveTaskType | ChangeTaskTitleType | ChangeTaskStatusType | AddToDoListType | RemoveToDoListType
 type AddTuskType = ReturnType<typeof addTaskAC>
 type RemoveTaskType = ReturnType<typeof removeTaskAC>
 type ChangeTaskTitleType = ReturnType<typeof changeTaskTitleAC>
 type ChangeTaskStatusType = ReturnType<typeof changeTaskStatusAC>
-type CreateTasksListAC = ReturnType<typeof createTasksListAC>
-type RemoveTasksListType = ReturnType<typeof removeTasksListAC>
-
 
 //Reducer
-export const taskReducer = (state: StateTasksType = initialStateForTaskReducer, action: GeneralActionType): StateTasksType => {
+export const tasksReducer = (state: StateTasksType = initialStateForTaskReducer, action: GeneralActionType): StateTasksType => {
     switch (action.type) {
 
         case ADD_TASK: {
@@ -62,14 +57,14 @@ export const taskReducer = (state: StateTasksType = initialStateForTaskReducer, 
             }
         }
 
-        case CREATE_TASK_LIST: {
+        case ADD_TODOLIST: {
             return {
                 ...state,
                 [action.toDoListID]: []
             }
         }
 
-        case REMOVE_TASK_LIST: {
+        case REMOVE_TODOLIST: {
             let stateCopy = {...state}
             delete stateCopy[action.toDoListID]
             return stateCopy

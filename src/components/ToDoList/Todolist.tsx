@@ -1,5 +1,10 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from '../../redux/reducers/toDoListReducer';
+import {
+    changeTitleToDoListAC,
+    filterTasksInToDoListAC,
+    FilterValuesType,
+    removeToDolistAC
+} from '../../redux/reducers/todolists-reducer';
 import {AddItemForm} from "../common/AddItemForm/AddItemForm";
 import {MutableSpan} from "../common/MutableSpan/MutableSpan";
 import IconButton from '@mui/material/IconButton';
@@ -9,60 +14,112 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Paper} from "@mui/material";
-import {TaskType} from "../../redux/reducers/taskReducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    StateTasksType
+} from "../../redux/reducers/tasks-reducer";
+import {useDispatch, useSelector} from "react-redux";
+import {RootReducerType} from "../../redux/store";
 
 type PropsType = {
     toDoListID: string
     title: string
     filter: FilterValuesType
-    tasks: Array<TaskType>
-    changeTaskStatus: (taskId: string, isDone: boolean, toDoListID: string) => void
-    changeFilter: (value: FilterValuesType, toDoListID: string) => void
-    removeToDoList: (toDoListID: string) => void
-    changeTitle: (title: string, toDoListID: string) => void
-    addTask: (title: string, toDoListID: string) => void
-    removeTask: (taskId: string, toDoListID: string) => void
-    changeTaskTitle: (title: string, toDoListID: string, taskId: string) => void
+    // changeTaskStatus: (taskId: string, isDone: boolean, toDoListID: string) => void
+    // changeFilter: (value: FilterValuesType, toDoListID: string) => void
+    // removeToDoList: (toDoListID: string) => void
+    // changeTitle: (title: string, toDoListID: string) => void
+    // addTask: (title: string, toDoListID: string) => void
+    // removeTask: (taskId: string, toDoListID: string) => void
+    // changeTaskTitle: (title: string, toDoListID: string, taskId: string) => void
 }
 
 export function Todolist(props: PropsType) {
 
-    const removeToDoList = () => {
-        props.removeToDoList(props.toDoListID)
+    //MapStateToProps
+    let tasks = useSelector<RootReducerType, StateTasksType>(state => state.tasks)
+
+    let filtredTasks = tasks[props.toDoListID];
+
+    if (props.filter === "active") {
+        filtredTasks = tasks[props.toDoListID].filter(t => t.isDone === false);
     }
 
-    const addTask = (title: string) => {
-        props.addTask(title, props.toDoListID);
+    if (props.filter === "completed") {
+        filtredTasks = tasks[props.toDoListID].filter(t => t.isDone === true);
+    }
+
+    //MapDispatchToProps
+    let dispatch = useDispatch();
+
+    function changeTitleToDoList(title: string, toDoListID: string) {
+        dispatch(changeTitleToDoListAC(title, toDoListID))
+    }
+
+    function addTask(title: string, toDoListID: string) {
+        dispatch(addTaskAC(title, toDoListID))
+    }
+
+    function removeTask(taskId: string, toDoListID: string) {
+        dispatch(removeTaskAC(taskId, toDoListID))
+    }
+
+    function changeTaskTitle(title: string, toDoListID: string, taskId: string) {
+        dispatch(changeTaskTitleAC(title, toDoListID, taskId))
+    }
+
+    function changeStatus(taskId: string, isDone: boolean, toDoListID: string) {
+        dispatch(changeTaskStatusAC(taskId, isDone, toDoListID))
+    }
+
+    function changeFilter(filter: FilterValuesType, toDoListID: string) {
+        dispatch(filterTasksInToDoListAC(filter, toDoListID))
+    }
+
+    function removeToDoList(toDoListID: string) {
+        dispatch(removeToDolistAC(toDoListID))
+        //dispatch(removeTasksListAC(toDoListID))
+    }
+
+    const removeToDoListHandler = () => {
+        removeToDoList(props.toDoListID)
+    }
+
+    const addTaskHandler = (title: string) => {
+        addTask(title, props.toDoListID);
     }
 
     const changeTitle = (title: string) => {
-        props.changeTitle(title, props.toDoListID)
+        changeTitleToDoList(title, props.toDoListID)
     }
 
-    const onAllClickHandler = () => props.changeFilter("all", props.toDoListID);
-    const onActiveClickHandler = () => props.changeFilter("active", props.toDoListID);
-    const onCompletedClickHandler = () => props.changeFilter("completed", props.toDoListID);
+    const onAllClickHandler = () => changeFilter("all", props.toDoListID);
+    const onActiveClickHandler = () => changeFilter("active", props.toDoListID);
+    const onCompletedClickHandler = () => changeFilter("completed", props.toDoListID);
 
     return (
         <Paper elevation={5}>
             <div style={{padding: '10px'}}>
                 <MutableSpan title={props.title} onChangeTitle={changeTitle}/>
-                <IconButton onClick={removeToDoList}>
+                <IconButton onClick={removeToDoListHandler}>
                     <DeleteIcon/>
                 </IconButton>
-                <AddItemForm addTask={addTask}/>
+                <AddItemForm addTask={addTaskHandler}/>
                 <div>
                     {
-                        props.tasks.map(t => {
+                        filtredTasks.map(t => {
 
-                            const onClickHandler = () => props.removeTask(t.id, props.toDoListID)
+                            const onClickHandler = () => removeTask(t.id, props.toDoListID)
 
                             const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                                props.changeTaskStatus(t.id, e.currentTarget.checked, props.toDoListID);
+                                changeStatus(t.id, e.currentTarget.checked, props.toDoListID);
                             }
 
                             const changeTuskTitleHandler = (title: string) => {
-                                props.changeTaskTitle(title, props.toDoListID, t.id)
+                                changeTaskTitle(title, props.toDoListID, t.id)
                             }
 
                             return <div key={t.id} className={t.isDone ? "is-done" : ""}>
