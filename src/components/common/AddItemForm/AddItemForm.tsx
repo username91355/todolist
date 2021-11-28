@@ -15,16 +15,16 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
+        if(error) setError(null)
         if (e.key === 'Enter') {
-            addItem();
+            addItem()
         }
     }
 
     const addItem = () => {
         if (title.trim() !== "") {
-            addTask(title.trim());
-            setTitle("");
+            addTask(title.trim())
+            setTitle("")
         } else {
             setError("Title is required");
         }
@@ -50,3 +50,5 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
     )
 
 }
+
+export default React.memo(AddItemForm)

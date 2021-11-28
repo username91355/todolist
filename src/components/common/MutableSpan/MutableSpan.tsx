@@ -5,7 +5,7 @@ type MutableSpanType = {
     onChangeTitle: (title: string) => void
 }
 
-export const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) => {
+const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) => {
 
     const [localTitle, setLocalTitle] = useState('')
     const [readingMode, setReadingMode] = useState<boolean>(true)
@@ -41,3 +41,5 @@ export const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) =
                      autoFocus/>
     )
 }
+
+export default React.memo(MutableSpan)
