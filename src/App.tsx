@@ -6,14 +6,14 @@ import Header from "./components/common/Header/Header";
 import {Container, Grid} from "@mui/material";
 import {addToDolistAC, StateToDoListType, ToDoListType} from "./redux/reducers/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {RootReducerType} from "./redux/store";
+import {AppStateType} from "./redux/store";
 import {StateTasksType} from "./redux/reducers/tasks-reducer";
 
 function App() {
 
     //MapStateToProps
-    let toDoList = useSelector<RootReducerType,StateToDoListType>(state => state.toDoList)
-    let tasks = useSelector<RootReducerType, StateTasksType>(state => state.tasks)
+    let toDoList = useSelector<AppStateType,StateToDoListType>(state => state.toDoList)
+    let tasks = useSelector<AppStateType, StateTasksType>(state => state.tasks)
 
     //MapDispatchToProps
     let dispatch = useDispatch();

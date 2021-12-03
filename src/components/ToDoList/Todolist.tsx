@@ -11,7 +11,13 @@ import IconButton from '@mui/material/IconButton';
 import {Button} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Paper} from "@mui/material";
-import {addTaskAC, TaskType} from "../../redux/reducers/tasks-reducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    TaskType
+} from "../../redux/reducers/tasks-reducer";
 import {useDispatch} from "react-redux";
 import Task from '../Task/Task';
 
@@ -19,7 +25,7 @@ type PropsType = {
     toDoListID: string
     title: string
     filter: FilterValuesType
-    tasks: any
+    tasks: Array<TaskType>
 }
 
 function Todolist(props: PropsType) {
@@ -42,6 +48,18 @@ function Todolist(props: PropsType) {
     const removeToDoList = useCallback((toDoListID: string) => {
         dispatch(removeToDolistAC(toDoListID))
     }, [dispatch])
+
+    const removeTask = (taskId: string, toDoListID: string) => {
+        dispatch(removeTaskAC(taskId, toDoListID))
+    }
+
+    const onChangeHandler = (taskId: string, isDone: boolean, toDoListID: string) => {
+        dispatch(changeTaskStatusAC(taskId, isDone, toDoListID))
+    }
+
+    const changeTuskTitle = (title: string, toDoListID: string, taskId: string) => {
+        dispatch(changeTaskTitleAC(title, toDoListID, taskId))
+    }
 
     const removeToDoListHandler = useCallback(() => {
         removeToDoList(props.toDoListID)
@@ -90,6 +108,9 @@ function Todolist(props: PropsType) {
                                 task={t}
                                 //id={t.id}
                                 toDoListID={props.toDoListID}
+                                removeTask={removeTask}
+                                onChangeHandler={onChangeHandler}
+                                changeTuskTitle={changeTuskTitle}
                             />
                         })
                     }

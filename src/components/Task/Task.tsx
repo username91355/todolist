@@ -12,7 +12,11 @@ type TProps = {
     task: TaskType
     //id: string
     toDoListID: string
+    removeTask: (taskId: string, toDoListID: string) => void
+    onChangeHandler: (taskId: string, isDone: boolean, toDoListID: string) => void
+    changeTuskTitle: (title: string, toDoListID: string, taskId: string) => void
 }
+
 
 const Task: React.FC<TProps> = props => {
 
@@ -20,33 +24,36 @@ const Task: React.FC<TProps> = props => {
         task,
         //id,
         toDoListID,
+        removeTask,
+        onChangeHandler,
+        changeTuskTitle
     } = props
 
     // const task = useSelector<RootReducerType, TaskType>(state => state.tasks[toDoListID]
     //     .filter((task: TaskType) => task.id === id)[0])
-    const dispatch = useDispatch()
+    //const dispatch = useDispatch()
 
-    const removeTask = () => {
-        dispatch(removeTaskAC(task.id, toDoListID))
+    const removeTaskOnTask = () => {
+        removeTask(task.id, toDoListID)
     }
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changeTaskStatusAC(task.id, e.currentTarget.checked, toDoListID))
+    const onChangeHandlerOnTask = (e: ChangeEvent<HTMLInputElement>) => {
+        onChangeHandler(task.id, e.currentTarget.checked, toDoListID)
     }
 
-    const changeTuskTitle = (title: string) => {
-        dispatch(changeTaskTitleAC(title, toDoListID, task.id))
+    const changeTuskTitleOnTask = (title: string) => {
+        changeTuskTitle(title, toDoListID, task.id)
     }
 
     return <div className={task.isDone ? "is-done" : ""}>
         <Checkbox
-            onChange={onChangeHandler}
+            onChange={onChangeHandlerOnTask}
             checked={task.isDone}
             icon={<BookmarkBorderIcon/>}
             checkedIcon={<BookmarkIcon/>}
         />
-        <MutableSpan title={task.title} onChangeTitle={changeTuskTitle}/>
-        <IconButton onClick={removeTask}>
+        <MutableSpan title={task.title} onChangeTitle={changeTuskTitleOnTask}/>
+        <IconButton onClick={removeTaskOnTask}>
             <ClearIcon/>
         </IconButton>
     </div>

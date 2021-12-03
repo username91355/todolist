@@ -41,8 +41,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
                        className={error ? "error" : ""}
                        size={'small'}
                        error={!!error}
-                       style={{backgroundColor: 'white',borderRadius: '5px', margin: '10px'}}
-            />
+                       style={{backgroundColor: 'white',borderRadius: '5px', margin: '10px'}}/>
             <Button onClick={addItem}
                     variant={"contained"}
                     style={{maxWidth: '50px', minWidth: '50px', minHeight: '40px', maxHeight: '40px' }}>Add</Button>
