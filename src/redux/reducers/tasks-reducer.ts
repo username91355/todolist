@@ -16,7 +16,7 @@ export const changeTaskStatusAC = (taskId: string, isDone: boolean, toDoListID: 
 
 //Types
 export type StateTasksType = { [key: string]: Array<TaskType> }
-export type TaskType = { id: string, title: string, isDone: boolean }
+export type TaskType = {id: string, title: string, isDone: boolean}
 export type GeneralActionType = AddTuskType | RemoveTaskType | ChangeTaskTitleType | ChangeTaskStatusType | AddToDoListType | RemoveToDoListType
 type AddTuskType = ReturnType<typeof addTaskAC>
 type RemoveTaskType = ReturnType<typeof removeTaskAC>
@@ -55,12 +55,12 @@ export const tasksReducer = (state: StateTasksType = {}, action: GeneralActionTy
             }
         }
 
-        case ADD_TODOLIST: {
-            return {
-                ...state,
-                [action.toDoListID]: []
-            }
-        }
+        // case ADD_TODOLIST: {
+        //     return {
+        //         ...state,
+        //         [action.toDoListID]: []
+        //     }
+        // }
 
         case REMOVE_TODOLIST: {
             let stateCopy = {...state}

@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react';
 import {
-    changeTitleToDoListAC,
+    changeTitleToDoListAC, deleteTodolistTC,
     filterTasksInToDoListAC,
     FilterValuesType,
-    removeToDolistAC
+    removeToDolistAC, updateTodolistTitleTC
 } from '../../redux/reducers/todolists-reducer';
 import AddItemForm from "../common/AddItemForm/AddItemForm";
 import MutableSpan from "../common/MutableSpan/MutableSpan";
@@ -28,13 +28,14 @@ type PropsType = {
     tasks: Array<TaskType>
 }
 
-function Todolist(props: PropsType) {
+function Todolist(props: any) {
 
     //MapDispatchToProps
     let dispatch = useDispatch();
 
     const changeTitleToDoList = useCallback((title: string, toDoListID: string) => {
-        dispatch(changeTitleToDoListAC(title, toDoListID))
+        dispatch(updateTodolistTitleTC(toDoListID, title))
+        //dispatch(changeTitleToDoListAC(title, toDoListID))
     }, [dispatch])
 
     const addTask = useCallback((title: string, toDoListID: string) => {
@@ -46,7 +47,8 @@ function Todolist(props: PropsType) {
     }, [dispatch])
 
     const removeToDoList = useCallback((toDoListID: string) => {
-        dispatch(removeToDolistAC(toDoListID))
+        dispatch(deleteTodolistTC(toDoListID))
+        //dispatch(removeToDolistAC(toDoListID))
     }, [dispatch])
 
     const removeTask = (taskId: string, toDoListID: string) => {
@@ -100,21 +102,21 @@ function Todolist(props: PropsType) {
                     <DeleteIcon/>
                 </IconButton>
                 <AddItemForm addTask={addTaskHandler}/>
-                <div>
-                    {
-                        filteredTasks.map((t: TaskType) => {
-                            return <Task
-                                key={t.id}
-                                task={t}
-                                //id={t.id}
-                                toDoListID={props.toDoListID}
-                                removeTask={removeTask}
-                                onChangeHandler={onChangeHandler}
-                                changeTuskTitle={changeTuskTitle}
-                            />
-                        })
-                    }
-                </div>
+                {/*<div>*/}
+                {/*    {*/}
+                {/*        filteredTasks.map((t: TaskType) => {*/}
+                {/*            return <Task*/}
+                {/*                key={t.id}*/}
+                {/*                task={t}*/}
+                {/*                //id={t.id}*/}
+                {/*                toDoListID={props.toDoListID}*/}
+                {/*                removeTask={removeTask}*/}
+                {/*                onChangeHandler={onChangeHandler}*/}
+                {/*                changeTuskTitle={changeTuskTitle}*/}
+                {/*            />*/}
+                {/*        })*/}
+                {/*    }*/}
+                {/*</div>*/}
                 <div>
                     <Button variant={props.filter === 'all' ? "contained" : "outlined"}
                             onClick={onAllClickHandler}

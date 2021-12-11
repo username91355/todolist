@@ -5,8 +5,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import MutableSpan from "../common/MutableSpan/MutableSpan";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
-import {useDispatch} from "react-redux";
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, TaskType} from "../../redux/reducers/tasks-reducer";
+import {TaskType} from "../../redux/reducers/tasks-reducer";
 
 type TProps = {
     task: TaskType

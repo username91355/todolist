@@ -17,11 +17,11 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if(error) setError(null)
         if (e.key === 'Enter') {
-            addItem()
+            addItemOnClick()
         }
     }
 
-    const addItem = () => {
+    const addItemOnClick = () => {
         if (title.trim() !== "") {
             addTask(title.trim())
             setTitle("")
@@ -42,7 +42,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
                        size={'small'}
                        error={!!error}
                        style={{backgroundColor: 'white',borderRadius: '5px', margin: '10px'}}/>
-            <Button onClick={addItem}
+            <Button onClick={addItemOnClick}
                     variant={"contained"}
                     style={{maxWidth: '50px', minWidth: '50px', minHeight: '40px', maxHeight: '40px' }}>Add</Button>
         </div>
