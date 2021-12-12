@@ -5,53 +5,66 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import MutableSpan from "../common/MutableSpan/MutableSpan";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
-import {TaskType} from "../../redux/reducers/tasks-reducer";
+import {deleteTaskTC, updateTaskTC} from "../../redux/reducers/tasks-reducer";
+import {useDispatch} from "react-redux";
+import {TaskStatuses, TTask} from "../../api/api";
 
 type TProps = {
-    task: TaskType
-    //id: string
+    task: TTask
     toDoListID: string
-    removeTask: (taskId: string, toDoListID: string) => void
-    onChangeHandler: (taskId: string, isDone: boolean, toDoListID: string) => void
-    changeTuskTitle: (title: string, toDoListID: string, taskId: string) => void
 }
-
 
 const Task: React.FC<TProps> = props => {
 
     const {
         task,
-        //id,
-        toDoListID,
-        removeTask,
-        onChangeHandler,
-        changeTuskTitle
+        toDoListID
     } = props
 
-    // const task = useSelector<RootReducerType, TaskType>(state => state.tasks[toDoListID]
-    //     .filter((task: TaskType) => task.id === id)[0])
-    //const dispatch = useDispatch()
+    const dispatch = useDispatch()
 
     const removeTaskOnTask = () => {
-        removeTask(task.id, toDoListID)
+        dispatch(deleteTaskTC(toDoListID,task.id))
     }
 
-    const onChangeHandlerOnTask = (e: ChangeEvent<HTMLInputElement>) => {
-        onChangeHandler(task.id, e.currentTarget.checked, toDoListID)
+    const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
+
+        const newTaskStatus = task.status === TaskStatuses.Complited
+            ? TaskStatuses.New
+            : TaskStatuses.Complited
+
+        dispatch(updateTaskTC(toDoListID,
+            task.id,
+            task.title,
+            task.description,
+            e.currentTarget.checked,
+            newTaskStatus,
+            task.priority,
+            task.startDate,
+            task.deadline))
+
     }
 
-    const changeTuskTitleOnTask = (title: string) => {
-        changeTuskTitle(title, toDoListID, task.id)
+    const changeTaskTitle = (title: string) => {
+        dispatch(updateTaskTC(toDoListID,
+            task.id,
+            title,
+            task.description,
+            task.completed,
+            task.status,
+            task.priority,
+            task.startDate,
+            task.deadline))
     }
 
-    return <div className={task.isDone ? "is-done" : ""}>
+    return <div className={task.completed ? "is-done" : ""}>
         <Checkbox
-            onChange={onChangeHandlerOnTask}
-            checked={task.isDone}
+            onChange={changeTaskStatus}
+            checked={task.status === 2}
             icon={<BookmarkBorderIcon/>}
             checkedIcon={<BookmarkIcon/>}
         />
-        <MutableSpan title={task.title} onChangeTitle={changeTuskTitleOnTask}/>
+        <MutableSpan title={task.title} onChangeTitle={changeTaskTitle}/>
         <IconButton onClick={removeTaskOnTask}>
             <ClearIcon/>
         </IconButton>

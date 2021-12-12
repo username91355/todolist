@@ -11,56 +11,106 @@ const instance = axios.create({
 export const todolistAPI = {
 
     getTodolists() {
-        return instance.get('/todo-lists')
+        return instance
+            .get<Array<TTodolist>>('/todo-lists')
     },
 
     createTodolist(title: string) {
-        return instance.post('/todo-lists', {
-            title: title
-        })
+        return instance
+            .post<ResponseType<{ item: TTodolist }>>('/todo-lists', {
+                title: title
+            })
     },
 
     deleteTodolist(todolistId: string) {
-        return instance.delete(`/todo-lists/${todolistId}`)
+        return instance
+            .delete<ResponseType<{}>>(`/todo-lists/${todolistId}`)
     },
 
     updateTodolistTitle(todolistId: string, newTitle: string) {
-        return instance.put(`/todo-lists/${todolistId}`, {
-            title: newTitle
-        })
+        return instance
+            .put<ResponseType<{}>>(`/todo-lists/${todolistId}`, {
+                title: newTitle
+            })
     },
 
     getTasks(todolistId: string, count: number = 10, page: number = 1) {
-        return instance.get(`/todo-lists/${todolistId}/tasks/?count=${count}&page=${page}`)
+        return instance
+            .get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks/?count=${count}&page=${page}`)
     },
 
     createTask(todolistId: string, title: string) {
-        return instance.post(`/todo-lists/${todolistId}/tasks`, {
-            title: title
-        })
+        return instance
+            .post<ResponseType<{ item: TTask }>>(`/todo-lists/${todolistId}/tasks`, {
+                title: title
+            })
     },
 
     deleteTask(todolistId: string, taskId: string) {
-        return instance.delete(`/todo-lists/${todolistId}/tasks/${taskId}`)
+        return instance
+            .delete<ResponseType<{}>>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
 
     updateTask(todolistId: string,
                taskId: string,
                title: string,
-               description: string,
+               description: string | null,
                completed: boolean,
                status: number,
                priority: number,
-               startDate: string,
-               deadline: string) {
-        return instance.put(`/todo-lists/${todolistId}/tasks/${taskId}`, {
-            title,
-            description,
-            completed,
-            status,
-            priority,
-            startDate,
-            deadline,
-        })
+               startDate: string | null,
+               deadline: string | null) {
+        debugger
+        return instance
+            .put<ResponseType<{ item: TTask }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, {
+                title,
+                description,
+                completed,
+                status,
+                priority,
+                startDate,
+                deadline,
+            })
     }
+}
+
+type TTodolist = {
+    addedDate: string
+    id: string
+    order: number
+    title: string
+}
+
+export type TTask = {
+    addedDate: string
+    deadline: string | null
+    description: string | null
+    id: string
+    order: number
+    priority: number
+    startDate: string | null
+    status: number
+    title: string
+    todoListId: string
+    completed: boolean
+}
+
+type GetTasksResponseType = {
+    error: string | null
+    items: TTask[]
+    totalCount: number
+}
+
+type ResponseType<T> = {
+    resultCode: number
+    messages: Array<string>
+    fieldsErrors: Array<string>
+    data: T
+}
+
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Complited = 2,
+    Draft = 3
 }
