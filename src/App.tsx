@@ -6,30 +6,27 @@ import Header from "./components/common/Header/Header";
 import {Container, Grid} from "@mui/material";
 import {
     createTodolistTC,
-    getTodolistsTC,
-    StateToDoListType
+    getTodolistsTC, StateToDoListType,
 } from "./redux/reducers/todolists-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./redux/store";
-import {StateTasksType} from "./redux/reducers/tasks-reducer";
 
 function App() {
 
     //MapStateToProps
-    let toDoList = useSelector<AppStateType, StateToDoListType>(state => state.toDoList)
-    let tasks = useSelector<AppStateType, StateTasksType>(state => state.tasks)
+    let toDoList = useSelector<AppStateType, StateToDoListType>(state => state.todolist)
+    let tasks = useSelector<AppStateType, any>(state => state.tasks) // any = import {SetTaskType} from "./redux/reducers/tasks-reducer"
 
     //MapDispatchToProps
     let dispatch = useDispatch();
 
     const addToDoList = useCallback((title: string) => {
         dispatch(createTodolistTC(title))
-        //dispatch(addToDolistAC(title))
     }, [dispatch])
 
-    useEffect(()=> {
+    useEffect(() => {
         dispatch(getTodolistsTC())
-    },[])
+    }, [dispatch])
 
     return (
         <div className={'app__wrapper'}>
@@ -49,7 +46,6 @@ function App() {
                                                   tasks={tasks[t.id]}
                                                   toDoListID={t.id}
                                                   title={t.title}
-                                                  filter={(!t.filter ? 'all' : t.filter)}
                                         />
                                     </Grid>
                                 )

@@ -10,98 +10,92 @@ const instance = axios.create({
 
 export const todolistAPI = {
 
-    getTodolists() {
-        return instance
-            .get<Array<TTodolist>>('/todo-lists')
-    },
-
     createTodolist(title: string) {
         return instance
-            .post<ResponseType<{ item: TTodolist }>>('/todo-lists', {
-                title: title
-            })
+            .post<IResponse<{ item: ITodolist }>>('/todo-lists', {title})
+            .then(response => response.data)
+            .catch(err => err)
+    },
+
+    getTodolists() {
+        return instance
+            .get<Array<ITodolist>>('/todo-lists')
+            .then(response => response.data)
+            .catch(err => err)
+    },
+
+    updateTodolistTitle(todolistId: string, title: string) {
+        return instance
+            .put<IResponse>(`/todo-lists/${todolistId}`, {title})
+            .then(response => response.data)
+            .catch(err => err)
     },
 
     deleteTodolist(todolistId: string) {
         return instance
-            .delete<ResponseType<{}>>(`/todo-lists/${todolistId}`)
-    },
-
-    updateTodolistTitle(todolistId: string, newTitle: string) {
-        return instance
-            .put<ResponseType<{}>>(`/todo-lists/${todolistId}`, {
-                title: newTitle
-            })
-    },
-
-    getTasks(todolistId: string, count: number = 10, page: number = 1) {
-        return instance
-            .get<GetTasksResponseType>(`/todo-lists/${todolistId}/tasks/?count=${count}&page=${page}`)
+            .delete<IResponse>(`/todo-lists/${todolistId}`)
+            .then(response => response.data)
+            .catch(err => err)
     },
 
     createTask(todolistId: string, title: string) {
         return instance
-            .post<ResponseType<{ item: TTask }>>(`/todo-lists/${todolistId}/tasks`, {
-                title: title
-            })
+            .post<IResponse<{ item: ITask }>>(`/todo-lists/${todolistId}/tasks`, {title})
+            .then(response => response.data)
+            .catch(err => err)
+    },
+
+    getTasks(todolistId: string, count: number = 10, page: number = 1) {
+        return instance
+            .get<IGetTasksResponse>(`/todo-lists/${todolistId}/tasks/?count=${count}&page=${page}`)
+            .then(response => response)
+            .catch(err => err)
+    },
+
+    updateTask(todolistId: string, task: ITask) {
+        return instance
+            .put<IResponse<{ item: ITask }>>(`/todo-lists/${todolistId}/tasks/${task.id}`, {...task})
+            .then(response => response.data)
+            .catch(err => err)
     },
 
     deleteTask(todolistId: string, taskId: string) {
         return instance
-            .delete<ResponseType<{}>>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+            .delete<IResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+            .then(response => response.data)
+            .catch(err => err)
     },
 
-    updateTask(todolistId: string,
-               taskId: string,
-               title: string,
-               description: string | null,
-               completed: boolean,
-               status: number,
-               priority: number,
-               startDate: string | null,
-               deadline: string | null) {
-        debugger
-        return instance
-            .put<ResponseType<{ item: TTask }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, {
-                title,
-                description,
-                completed,
-                status,
-                priority,
-                startDate,
-                deadline,
-            })
-    }
 }
 
-type TTodolist = {
+export interface ITodolist {
     addedDate: string
     id: string
     order: number
     title: string
 }
 
-export type TTask = {
+export interface ITask {
     addedDate: string
     deadline: string | null
     description: string | null
     id: string
     order: number
-    priority: number
+    priority: TaskPriorities
     startDate: string | null
-    status: number
+    status: TaskStatuses
     title: string
     todoListId: string
     completed: boolean
 }
 
-type GetTasksResponseType = {
+interface IGetTasksResponse {
     error: string | null
-    items: TTask[]
+    items: ITask[]
     totalCount: number
 }
 
-type ResponseType<T> = {
+interface IResponse<T = {}> {
     resultCode: number
     messages: Array<string>
     fieldsErrors: Array<string>
@@ -111,6 +105,14 @@ type ResponseType<T> = {
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
-    Complited = 2,
+    Completed = 2,
     Draft = 3
+}
+
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    High = 2,
+    Urgently = 3,
+    Later = 4
 }

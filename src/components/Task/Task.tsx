@@ -7,10 +7,10 @@ import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import {deleteTaskTC, updateTaskTC} from "../../redux/reducers/tasks-reducer";
 import {useDispatch} from "react-redux";
-import {TaskStatuses, TTask} from "../../api/api";
+import {ITask, TaskStatuses} from "../../api/api";
 
 type TProps = {
-    task: TTask
+    task: ITask
     toDoListID: string
 }
 
@@ -24,37 +24,27 @@ const Task: React.FC<TProps> = props => {
     const dispatch = useDispatch()
 
     const removeTaskOnTask = () => {
-        dispatch(deleteTaskTC(toDoListID,task.id))
+        dispatch(deleteTaskTC(toDoListID, task.id))
     }
 
     const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
 
-        const newTaskStatus = task.status === TaskStatuses.Complited
+        const newTaskStatus = task.status === TaskStatuses.Completed
             ? TaskStatuses.New
-            : TaskStatuses.Complited
+            : TaskStatuses.Completed
 
-        dispatch(updateTaskTC(toDoListID,
-            task.id,
-            task.title,
-            task.description,
-            e.currentTarget.checked,
-            newTaskStatus,
-            task.priority,
-            task.startDate,
-            task.deadline))
-
+        dispatch(updateTaskTC(toDoListID, {
+            ...task,
+            completed: e.currentTarget.checked,
+            status: newTaskStatus
+        }))
     }
 
     const changeTaskTitle = (title: string) => {
-        dispatch(updateTaskTC(toDoListID,
-            task.id,
-            title,
-            task.description,
-            task.completed,
-            task.status,
-            task.priority,
-            task.startDate,
-            task.deadline))
+        dispatch(updateTaskTC(toDoListID, {
+            ...task,
+            title: title
+        }))
     }
 
     return <div className={task.completed ? "is-done" : ""}>

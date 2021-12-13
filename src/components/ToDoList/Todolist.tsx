@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {deleteTodolistTC, filterTasksInToDoListAC, FilterValuesType, updateTodolistTitleTC
+import {deleteTodolistTC, updateTodolistTitleTC
 } from '../../redux/reducers/todolists-reducer';
 import AddItemForm from "../common/AddItemForm/AddItemForm";
 import MutableSpan from "../common/MutableSpan/MutableSpan";
@@ -11,13 +11,12 @@ import { createTaskTC, getTasksTC
 } from "../../redux/reducers/tasks-reducer";
 import {useDispatch} from "react-redux";
 import Task from '../Task/Task';
-import {TaskStatuses, TTask} from "../../api/api";
+import {ITask} from "../../api/api";
 
 type TProps = {
     toDoListID: string
     title: string
-    filter: FilterValuesType
-    tasks: Array<TTask>
+    tasks: Array<ITask>
 }
 
 function Todolist(props: TProps) {
@@ -27,7 +26,7 @@ function Todolist(props: TProps) {
 
     useEffect(()=> {
         dispatch(getTasksTC(props.toDoListID))
-    },[])
+    },[dispatch,props.toDoListID])
 
     const changeTitleToDoList = useCallback((title: string, toDoListID: string) => {
         dispatch(updateTodolistTitleTC(toDoListID, title))
@@ -37,9 +36,9 @@ function Todolist(props: TProps) {
         dispatch(createTaskTC(toDoListID, title))
     }, [dispatch])
 
-    const changeFilter = useCallback((filter: FilterValuesType, toDoListID: string) => {
-        dispatch(filterTasksInToDoListAC(filter, toDoListID))
-    }, [dispatch])
+    // const changeFilter = useCallback(( toDoListID: string) => {
+    //     dispatch(filterTasksInToDoListAC(filter, toDoListID))
+    // }, [dispatch])
 
     const removeToDoList = useCallback((toDoListID: string) => {
         dispatch(deleteTodolistTC(toDoListID))
@@ -57,24 +56,24 @@ function Todolist(props: TProps) {
         changeTitleToDoList(title, props.toDoListID)
     }, [props.toDoListID, changeTitleToDoList])
 
-    const onAllClickHandler = useCallback(() => changeFilter("all", props.toDoListID),
-        [changeFilter, props.toDoListID])
-
-    const onActiveClickHandler = useCallback(() => changeFilter("active", props.toDoListID),
-        [changeFilter, props.toDoListID])
-
-    const onCompletedClickHandler = useCallback(() => changeFilter("completed", props.toDoListID),
-        [changeFilter, props.toDoListID])
+    // const onAllClickHandler = useCallback(() => changeFilter("all", props.toDoListID),
+    //     [changeFilter, props.toDoListID])
+    //
+    // const onActiveClickHandler = useCallback(() => changeFilter("active", props.toDoListID),
+    //     [changeFilter, props.toDoListID])
+    //
+    // const onCompletedClickHandler = useCallback(() => changeFilter("completed", props.toDoListID),
+    //     [changeFilter, props.toDoListID])
 
     let filteredTasks = props.tasks ? props.tasks : [];
 
-    if (props.filter === "active") {
-        filteredTasks = props.tasks.filter((t: TTask) => t.status !== TaskStatuses.Complited)
-    }
-
-    if (props.filter === "completed") {
-        filteredTasks = props.tasks.filter((t: TTask) => t.status === TaskStatuses.Complited)
-    }
+    // if (props.filter === "active") {
+    //     filteredTasks = props.tasks.filter((t: ITask) => t.status !== TaskStatuses.Completed)
+    // }
+    //
+    // if (props.filter === "completed") {
+    //     filteredTasks = props.tasks.filter((t: ITask) => t.status === TaskStatuses.Completed)
+    // }
 
     return (
         <Paper elevation={5}>
@@ -96,14 +95,17 @@ function Todolist(props: TProps) {
                     }
                 </div>
                 <div>
-                    <Button variant={props.filter === 'all' ? "contained" : "outlined"}
-                            onClick={onAllClickHandler}
+                    <Button
+                        //variant={props.filter === 'all' ? "contained" : "outlined"}
+                            //onClick={onAllClickHandler}
                             size={'small'}>All</Button>
-                    <Button variant={props.filter === 'active' ? "contained" : "outlined"}
-                            onClick={onActiveClickHandler}
+                    <Button
+                        //variant={props.filter === 'active' ? "contained" : "outlined"}
+                            //onClick={onActiveClickHandler}
                             size={'small'}>Active</Button>
-                    <Button variant={props.filter === 'completed' ? "contained" : "outlined"}
-                            onClick={onCompletedClickHandler}
+                    <Button
+                        //variant={props.filter === 'completed' ? "contained" : "outlined"}
+                            //onClick={onCompletedClickHandler}
                             size={'small'}>Completed</Button>
                 </div>
             </div>
