@@ -13,19 +13,17 @@ import {AppStateType} from "./redux/store";
 
 function App() {
 
-    //MapStateToProps
-    let toDoList = useSelector<AppStateType, StateToDoListType>(state => state.todolist)
-    let tasks = useSelector<AppStateType, any>(state => state.tasks) // any = import {SetTaskType} from "./redux/reducers/tasks-reducer"
-
-    //MapDispatchToProps
-    let dispatch = useDispatch();
-
-    const addToDoList = useCallback((title: string) => {
-        dispatch(createTodolistTC(title))
-    }, [dispatch])
+    // MapStateToProps MapDispatchToProps
+    let todolists = useSelector<AppStateType, StateToDoListType>(state => state.todolist),
+        tasks = useSelector<AppStateType, any>(state => state.tasks), // any = import {SetTaskType} from "./redux/reducers/tasks-reducer"
+        dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(getTodolistsTC())
+    }, [dispatch])
+
+    const addToDoList = useCallback((title: string) => {
+        dispatch(createTodolistTC(title))
     }, [dispatch])
 
     return (
@@ -36,10 +34,9 @@ function App() {
                     <Grid item xs={12}>
                         <AddItemForm addTask={addToDoList}/>
                     </Grid>
-
                     <Grid container spacing={3}>
                         {
-                            toDoList.map(t => {
+                            todolists.map(t => {
                                 return (
                                     <Grid key={t.id} item xs={4} style={{minWidth: '300px'}}>
                                         <Todolist key={t.id}

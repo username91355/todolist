@@ -47,7 +47,7 @@ const Task: React.FC<TProps> = props => {
         }))
     }
 
-    return <div className={task.completed ? "is-done" : ""}>
+    return <div>
         <Checkbox
             onChange={changeTaskStatus}
             checked={task.status === 2}

@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
 
-describe('addItemForm', () => {
-    it('base example, visually looks correct', async () => {
+describe('AddItemForm', () => {
+    it('Base example, visually looks correct', async () => {
         // APIs from jest-puppeteer
         const browser = await puppeteer.launch()
         const page = await browser.newPage();
