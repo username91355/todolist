@@ -3,27 +3,10 @@ import {ThunkType} from "../store";
 import {REMOVE_TODOLIST, TRemoveToDoList} from "./todolists-reducer";
 
 //Action types
-const ADD_TASK = 'ADD_TASK'
-const SET_TASKS = 'SET_TODOLIST_TASKS'
-const UPDATE_TASK = 'UPDATE_TASK'
-const REMOVE_TASK = 'REMOVE_TASK'
-
-//Action Creators
-export const addTaskAC = (todoListId: string, task: ITask) => ({
-    type: ADD_TASK, todoListId, task
-} as const)
-
-export const setTasksAC = (todolistId: string, tasks: Array<ITask>) => ({
-    type: SET_TASKS, todolistId, tasks
-} as const)
-
-export const updateTaskAC = (todolistId: string, taskId: string, task: ITask) => ({
-    type: UPDATE_TASK, todolistId, taskId, task
-} as const)
-
-export const removeTaskAC = (toDoListID: string, taskId: string) => ({
-    type: REMOVE_TASK, taskId, toDoListID
-} as const)
+const ADD_TASK = 'todolist/tasks-reducer/ADD_TASK'
+const SET_TASKS = 'todolist/tasks-reducer/SET_TODOLIST_TASKS'
+const UPDATE_TASK = 'todolist/tasks-reducer/UPDATE_TASK'
+const REMOVE_TASK = 'todolist/tasks-reducer/REMOVE_TASK'
 
 //Types
 export interface IStateTasks {
@@ -54,7 +37,6 @@ export const tasksReducer = (state: IStateTasks = {}, action: TGeneralActionTask
                 [action.todoListId]: [action.task, ...oldTasks]
             }
 
-
         case SET_TASKS:
             return {
                 ...state,
@@ -68,7 +50,6 @@ export const tasksReducer = (state: IStateTasks = {}, action: TGeneralActionTask
                     ? {...action.task}
                     : i)
             }
-
 
         case REMOVE_TASK:
             return {
@@ -85,6 +66,24 @@ export const tasksReducer = (state: IStateTasks = {}, action: TGeneralActionTask
     }
 }
 
+//Action Creators
+export const addTaskAC = (todoListId: string, task: ITask) => ({
+    type: ADD_TASK, todoListId, task
+} as const)
+
+export const setTasksAC = (todolistId: string, tasks: Array<ITask>) => ({
+    type: SET_TASKS, todolistId, tasks
+} as const)
+
+export const updateTaskAC = (todolistId: string, taskId: string, task: ITask) => ({
+    type: UPDATE_TASK, todolistId, taskId, task
+} as const)
+
+export const removeTaskAC = (toDoListID: string, taskId: string) => ({
+    type: REMOVE_TASK, taskId, toDoListID
+} as const)
+
+//Thunk
 export const createTaskTC = (todolistId: string, title: string): ThunkType => async dispatch => {
     try {
         const response = await todolistAPI.createTask(todolistId, title)

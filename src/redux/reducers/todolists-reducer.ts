@@ -1,29 +1,11 @@
-//Action types
 import {ITodolist, todolistAPI} from "../../api/api";
 import {ThunkType} from "../store";
 
 //Action types
-const ADD_TODOLIST = 'ADD_TODOLIST'
-const SET_TODOLISTS = 'SET_TODOLISTS'
-const CHANGE_TITLE_TODOLIST = 'CHANGE_TITLE_TODOLIST'
-export const REMOVE_TODOLIST = 'REMOVE_TODOLIST'
-
-//Action Creators
-export const addToDolistAC = (todolist: ITodolist) => ({
-    type: ADD_TODOLIST, todolist
-} as const)
-
-export const setTodolistsAC = (todolists: Array<ITodolist>) => ({
-    type: SET_TODOLISTS, todolists
-} as const)
-
-export const changeTitleToDoListAC = (toDoListID: string, title: string) => ({
-    type: CHANGE_TITLE_TODOLIST, toDoListID, title,
-} as const)
-
-export const removeToDolistAC = (toDoListID: string) => ({
-    type: REMOVE_TODOLIST, toDoListID
-} as const)
+const ADD_TODOLIST = 'todolist/todolists-reducer/ADD_TODOLIST'
+const SET_TODOLISTS = 'todolist/todolists-reducer/SET_TODOLISTS'
+const CHANGE_TITLE_TODOLIST = 'todolist/todolists-reducer/CHANGE_TITLE_TODOLIST'
+export const REMOVE_TODOLIST = 'todolist/todolists-reducer/REMOVE_TODOLIST'
 
 //Types
 export type StateToDoListType = Array<ITodolist>
@@ -57,6 +39,23 @@ export const todolistsReducer = (state: StateToDoListType = [], action: TGeneral
             return state
     }
 }
+
+//Action Creators
+export const addToDolistAC = (todolist: ITodolist) => ({
+    type: ADD_TODOLIST, todolist
+} as const)
+
+export const setTodolistsAC = (todolists: Array<ITodolist>) => ({
+    type: SET_TODOLISTS, todolists
+} as const)
+
+export const changeTitleToDoListAC = (toDoListID: string, title: string) => ({
+    type: CHANGE_TITLE_TODOLIST, toDoListID, title,
+} as const)
+
+export const removeToDolistAC = (toDoListID: string) => ({
+    type: REMOVE_TODOLIST, toDoListID
+} as const)
 
 //Thunk
 export const createTodolistTC = (title: string): ThunkType => async dispatch => {

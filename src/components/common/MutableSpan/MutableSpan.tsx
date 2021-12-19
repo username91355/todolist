@@ -7,7 +7,7 @@ type MutableSpanType = {
 
 const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) => {
 
-    const [localTitle, setLocalTitle] = useState('')
+    const [localTitle, setLocalTitle] = useState<string>('')
     const [readingMode, setReadingMode] = useState<boolean>(true)
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {

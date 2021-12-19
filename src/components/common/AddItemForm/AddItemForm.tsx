@@ -7,8 +7,21 @@ type AddItemFormPropsType = {
 
 export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
 
-    const [title, setTitle] = useState("")
+    const [title, setTitle] = useState<string>("")
     const [error, setError] = useState<string | null>(null)
+
+    const buttonStyle = {
+        maxWidth: '50px',
+        minWidth: '50px',
+        minHeight: '40px',
+        maxHeight: '40px',
+    }
+
+    const textFieldStyle = {
+        backgroundColor: 'white',
+        borderRadius: '5px',
+        margin: '10px'
+    }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
@@ -41,10 +54,10 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
                        className={error ? "error" : ""}
                        size={'small'}
                        error={!!error}
-                       style={{backgroundColor: 'white',borderRadius: '5px', margin: '10px'}}/>
+                       style={textFieldStyle}/>
             <Button onClick={addItemOnClick}
                     variant={"contained"}
-                    style={{maxWidth: '50px', minWidth: '50px', minHeight: '40px', maxHeight: '40px' }}>Add</Button>
+                    style={buttonStyle}>Add</Button>
         </div>
     )
 

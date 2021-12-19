@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     deleteTodolistTC, updateTodolistTitleTC
 } from '../../redux/reducers/todolists-reducer';
@@ -13,13 +13,15 @@ import {
 } from "../../redux/reducers/tasks-reducer";
 import {useDispatch} from "react-redux";
 import Task from '../Task/Task';
-import {ITask} from "../../api/api";
+import {ITask, TaskStatuses} from "../../api/api";
 
 type TProps = {
     toDoListID: string
     title: string
     tasks: Array<ITask>
 }
+
+type TFilter = 'all' | 'completed' | 'active'
 
 const Todolist: React.FC<TProps> = props => {
 
@@ -29,7 +31,9 @@ const Todolist: React.FC<TProps> = props => {
         tasks
     } = props
 
-    let dispatch = useDispatch();
+    const dispatch = useDispatch();
+
+    const [filter,setFilter] = useState<TFilter>('all')
 
     useEffect(() => {
         dispatch(getTasksTC(toDoListID))
@@ -59,24 +63,26 @@ const Todolist: React.FC<TProps> = props => {
         changeTitleToDoList(title, toDoListID)
     }, [toDoListID, changeTitleToDoList])
 
-    // const onAllClickHandler = useCallback(() => changeFilter("all", props.toDoListID),
-    //     [changeFilter, props.toDoListID])
-    //
-    // const onActiveClickHandler = useCallback(() => changeFilter("active", props.toDoListID),
-    //     [changeFilter, props.toDoListID])
-    //
-    // const onCompletedClickHandler = useCallback(() => changeFilter("completed", props.toDoListID),
-    //     [changeFilter, props.toDoListID])
+    //Filter tasks
+
+    const onAllClickHandler = useCallback(() => setFilter("all"),
+        [])
+
+    const onActiveClickHandler = useCallback(() => setFilter("active"),
+        [])
+
+    const onCompletedClickHandler = useCallback(() => setFilter("completed"),
+        [])
 
     let filteredTasks = tasks ? tasks : [];
 
-    // if (props.filter === "active") {
-    //     filteredTasks = props.tasks.filter((t: ITask) => t.status !== TaskStatuses.Completed)
-    // }
-    //
-    // if (props.filter === "completed") {
-    //     filteredTasks = props.tasks.filter((t: ITask) => t.status === TaskStatuses.Completed)
-    // }
+    if (filter === "active") {
+        filteredTasks = props.tasks.filter((t: ITask) => t.status !== TaskStatuses.Completed)
+    }
+
+    if (filter === "completed") {
+        filteredTasks = props.tasks.filter((t: ITask) => t.status === TaskStatuses.Completed)
+    }
 
     return (
         <Paper elevation={5}>
@@ -99,16 +105,16 @@ const Todolist: React.FC<TProps> = props => {
                 </div>
                 <div>
                     <Button
-                        //variant={props.filter === 'all' ? "contained" : "outlined"}
-                        //onClick={onAllClickHandler}
+                        variant={filter === 'all' ? "contained" : "outlined"}
+                        onClick={onAllClickHandler}
                         size={'small'}>All</Button>
                     <Button
-                        //variant={props.filter === 'active' ? "contained" : "outlined"}
-                        //onClick={onActiveClickHandler}
+                        variant={filter === 'active' ? "contained" : "outlined"}
+                        onClick={onActiveClickHandler}
                         size={'small'}>Active</Button>
                     <Button
-                        //variant={props.filter === 'completed' ? "contained" : "outlined"}
-                        //onClick={onCompletedClickHandler}
+                        variant={filter === 'completed' ? "contained" : "outlined"}
+                        onClick={onCompletedClickHandler}
                         size={'small'}>Completed</Button>
                 </div>
             </div>
