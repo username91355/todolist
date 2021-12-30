@@ -1,4 +1,4 @@
-import MutableSpan from "../components/common/MutableSpan/MutableSpan";
+import MutableSpan from "../components/MutableSpan/MutableSpan";
 import {ComponentMeta, ComponentStory,} from "@storybook/react";
 import {action} from "@storybook/addon-actions";
 

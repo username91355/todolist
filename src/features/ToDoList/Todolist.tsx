@@ -2,18 +2,19 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {
     deleteTodolistTC, updateTodolistTitleTC
 } from '../../redux/reducers/todolists-reducer';
-import AddItemForm from "../common/AddItemForm/AddItemForm";
-import MutableSpan from "../common/MutableSpan/MutableSpan";
+import AddItemForm from "../../components/AddItemForm/AddItemForm";
+import MutableSpan from "../../components/MutableSpan/MutableSpan";
 import IconButton from '@mui/material/IconButton';
-import {Button} from "@mui/material";
+import {Button, CircularProgress} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {Paper} from "@mui/material";
 import {
     createTaskTC, getTasksTC
 } from "../../redux/reducers/tasks-reducer";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Task from '../Task/Task';
 import {ITask, TaskStatuses} from "../../api/api";
+import {AppStateType} from "../../redux/store";
 
 type TProps = {
     toDoListID: string
@@ -33,7 +34,8 @@ const Todolist: React.FC<TProps> = props => {
 
     const dispatch = useDispatch();
 
-    const [filter,setFilter] = useState<TFilter>('all')
+    const todolistsStatus = useSelector((state: AppStateType) => state.todolist.todolistsStatus)
+    const [filter, setFilter] = useState<TFilter>('all')
 
     useEffect(() => {
         dispatch(getTasksTC(toDoListID))
@@ -93,8 +95,11 @@ const Todolist: React.FC<TProps> = props => {
                 </IconButton>
                 <AddItemForm addTask={addTaskHandler}/>
                 <div>
-                    {
-                        filteredTasks.map( t => {
+                    {todolistsStatus === 'loading'
+                        ? <div style={{textAlign: 'center'}}>
+                            <CircularProgress/>
+                        </div>
+                        : filteredTasks.map(t => {
                             return <Task
                                 key={t.id}
                                 task={t}

@@ -2,7 +2,7 @@ import React, {ChangeEvent} from 'react';
 import {Checkbox} from "@mui/material";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import MutableSpan from "../common/MutableSpan/MutableSpan";
+import MutableSpan from "../../components/MutableSpan/MutableSpan";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import {deleteTaskTC, updateTaskTC} from "../../redux/reducers/tasks-reducer";

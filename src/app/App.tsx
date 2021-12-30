@@ -1,20 +1,26 @@
 import React, {useCallback, useEffect} from 'react';
 import './App.css';
-import Todolist from './components/ToDoList/Todolist';
-import AddItemForm from "./components/common/AddItemForm/AddItemForm";
-import Header from "./components/common/Header/Header";
-import {Container, Grid} from "@mui/material";
+import {AppStateType} from "../redux/store";
+import {AddItemForm} from "../components/AddItemForm/AddItemForm";
+import Todolist from "../features/ToDoList/Todolist";
+import Header from '../components/Header/Header';
+import {Container, Grid, LinearProgress} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {RequestStatusType} from "../redux/reducers/app-reducer";
 import {
     createTodolistTC,
-    getTodolistsTC, StateToDoListType,
-} from "./redux/reducers/todolists-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "./redux/store";
+    getTodolistsTC,
+} from "../redux/reducers/todolists-reducer";
+import {ITodolist} from "../api/api";
+import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
+
 
 function App() {
 
-    // MapStateToProps MapDispatchToProps
-    let todolists = useSelector<AppStateType, StateToDoListType>(state => state.todolist),
+    const
+        todolists = useSelector<AppStateType, ITodolist[]>(state => state.todolist.todolists),
+        appStatus = useSelector<AppStateType, RequestStatusType>(state => state.app.appStatus),
+        appError = useSelector<AppStateType, string | null>(state => state.app.error),
         tasks = useSelector<AppStateType, any>(state => state.tasks), // any = import {SetTaskType} from "./redux/reducers/tasks-reducer"
         dispatch = useDispatch();
 
@@ -28,7 +34,9 @@ function App() {
 
     return (
         <div className={'app__wrapper'}>
+            <ErrorSnackbar error={appError}/>
             <Header/>
+            {appStatus === 'loading' && <LinearProgress/>}
             <Container>
                 <Grid container>
                     <Grid item xs={12}>

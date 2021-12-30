@@ -1,6 +1,6 @@
 import {todolistAPI, ITask} from "../../api/api";
 import {ThunkType} from "../store";
-import {REMOVE_TODOLIST, TRemoveToDoList} from "./todolists-reducer";
+import {REMOVE_TODOLIST, setToDolistsStatusAC, TRemoveToDoList} from "./todolists-reducer";
 
 //Action types
 const ADD_TASK = 'todolist/tasks-reducer/ADD_TASK'
@@ -97,11 +97,14 @@ export const createTaskTC = (todolistId: string, title: string): ThunkType => as
 
 export const getTasksTC = (todolistId: string): ThunkType => async dispatch => {
     try {
+        dispatch(setToDolistsStatusAC('loading'))
         const response = await todolistAPI.getTasks(todolistId)
         if (!response.data.error) {
             dispatch(setTasksAC(todolistId, response.data.items))
+            dispatch(setToDolistsStatusAC('succeeded'))
         }
     } catch (err) {
+        dispatch(setToDolistsStatusAC('failed'))
         console.error(`Error in get task TC: ${err}`)
     }
 }
