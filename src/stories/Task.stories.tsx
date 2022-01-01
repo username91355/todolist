@@ -1,7 +1,7 @@
-import Task from "../features/Task/Task";
+import {Task} from "../features/Task/Task";
 import {ComponentMeta, ComponentStory,} from "@storybook/react";
-import {ITask} from "../api/api";
 import {AppDecoratorStories} from "./decorators/AppDecorator.stories";
+import { ITask } from "../types/types";
 
 const testTask: ITask = {
     addedDate: 'addedDate',

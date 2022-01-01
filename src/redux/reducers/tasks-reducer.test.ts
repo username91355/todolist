@@ -1,4 +1,4 @@
-import {ITask} from "../../api/api";
+import { ITask } from "../../types/types";
 import {addTaskAC, IStateTasks, removeTaskAC, setTasksAC, tasksReducer, updateTaskAC} from "./tasks-reducer";
 import {removeToDolistAC} from "./todolists-reducer";
 
@@ -17,7 +17,7 @@ const testTask: ITask = {
 }
 
 const testState: IStateTasks = {
-    ['testStateToDoListID']: [{
+    'testStateToDoListID': [{
         addedDate: 'testStateAddedDate',
         deadline: 'testStateDeadline',
         description: 'testStateDescription',
@@ -58,7 +58,7 @@ describe('Tasks reducer',()=>{
     })
 
     it('Set tasks AC', () => {
-        const startState: IStateTasks = {['testTodoListId']: []}
+        const startState: IStateTasks = {'testTodoListId': []}
         const result = tasksReducer(startState, setTasksAC('testTodoListId', [testTask]))
 
         expect(result['testTodoListId']).toEqual([testTask])

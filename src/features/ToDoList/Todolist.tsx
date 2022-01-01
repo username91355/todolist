@@ -1,80 +1,62 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-    deleteTodolistTC, updateTodolistTitleTC
-} from '../../redux/reducers/todolists-reducer';
-import AddItemForm from "../../components/AddItemForm/AddItemForm";
-import MutableSpan from "../../components/MutableSpan/MutableSpan";
+import React, {useCallback, useEffect} from 'react';
+import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
+import {MutableSpan} from "../../components/MutableSpan/MutableSpan";
 import IconButton from '@mui/material/IconButton';
-import {Button, CircularProgress} from "@mui/material";
+import {Button, CircularProgress, Paper} from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {Paper} from "@mui/material";
-import {
-    createTaskTC, getTasksTC
-} from "../../redux/reducers/tasks-reducer";
+import {createTaskTC, getTasksTC} from "../../redux/reducers/tasks-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import Task from '../Task/Task';
-import {ITask, TaskStatuses} from "../../api/api";
+import {Task} from '../Task/Task';
+import {TaskStatuses} from "../../api/api";
 import {AppStateType} from "../../redux/store";
+import {ITask} from "../../types/types";
+import {
+    deleteTodolistTC,
+    setTodolistFilterStatusAC,
+    TFilter,
+    updateTodolistTitleTC
+} from '../../redux/reducers/todolists-reducer';
 
-type TProps = {
-    toDoListID: string
-    title: string
-    tasks: Array<ITask>
-}
+export const Todolist: React.FC<IProps> = React.memo(props => {
 
-type TFilter = 'all' | 'completed' | 'active'
+    const {toDoListID, title, tasks, filter} = props
 
-const Todolist: React.FC<TProps> = props => {
+    const
+        dispatch = useDispatch(),
+        todolistsStatus = useSelector((state: AppStateType) => state.todolist.todolistsStatus),
+        isDisabled = todolistsStatus === 'loading'
 
-    const {
-        toDoListID,
-        title,
-        tasks
-    } = props
-
-    const dispatch = useDispatch();
-
-    const todolistsStatus = useSelector((state: AppStateType) => state.todolist.todolistsStatus)
-    const [filter, setFilter] = useState<TFilter>('all')
 
     useEffect(() => {
         dispatch(getTasksTC(toDoListID))
     }, [dispatch, toDoListID])
 
-    const changeTitleToDoList = useCallback((title: string, toDoListID: string) => {
+    //Work with todolist`s
+    const changeTitle = useCallback((title: string) => {
         dispatch(updateTodolistTitleTC(toDoListID, title))
-    }, [dispatch])
-
-    const addTask = useCallback((title: string, toDoListID: string) => {
-        dispatch(createTaskTC(toDoListID, title))
-    }, [dispatch])
-
-    const removeToDoList = useCallback((toDoListID: string) => {
-        dispatch(deleteTodolistTC(toDoListID))
-    }, [dispatch])
-
-    const removeToDoListHandler = useCallback(() => {
-        removeToDoList(toDoListID)
-    }, [toDoListID, removeToDoList])
+    }, [dispatch,toDoListID])
 
     const addTaskHandler = useCallback((title: string) => {
-        addTask(title, toDoListID);
-    }, [addTask, toDoListID])
+        dispatch(createTaskTC(toDoListID, title))
+    }, [dispatch,toDoListID])
 
-    const changeTitle = useCallback((title: string) => {
-        changeTitleToDoList(title, toDoListID)
-    }, [toDoListID, changeTitleToDoList])
+    const removeToDoListHandler = useCallback(() => {
+        dispatch(deleteTodolistTC(toDoListID))
+    }, [dispatch,toDoListID])
 
     //Filter tasks
+    const setTodolistFilterStatus = useCallback((id: string, status: TFilter) => {
+        dispatch(setTodolistFilterStatusAC(id, status))
+    },[dispatch])
 
-    const onAllClickHandler = useCallback(() => setFilter("all"),
-        [])
+    const onAllClickHandler = useCallback(() => setTodolistFilterStatus(toDoListID, "all"),
+        [setTodolistFilterStatus, toDoListID])
 
-    const onActiveClickHandler = useCallback(() => setFilter("active"),
-        [])
+    const onActiveClickHandler = useCallback(() => setTodolistFilterStatus(toDoListID, "active"),
+        [setTodolistFilterStatus, toDoListID])
 
-    const onCompletedClickHandler = useCallback(() => setFilter("completed"),
-        [])
+    const onCompletedClickHandler = useCallback(() => setTodolistFilterStatus(toDoListID, "completed"),
+        [setTodolistFilterStatus, toDoListID])
 
     let filteredTasks = tasks ? tasks : [];
 
@@ -89,11 +71,13 @@ const Todolist: React.FC<TProps> = props => {
     return (
         <Paper elevation={5}>
             <div style={{padding: '10px'}}>
-                <MutableSpan title={title} onChangeTitle={changeTitle}/>
-                <IconButton onClick={removeToDoListHandler}>
+                <MutableSpan title={title}
+                             disabled={isDisabled}
+                             onChangeTitle={changeTitle}/>
+                <IconButton onClick={removeToDoListHandler} disabled={isDisabled}>
                     <DeleteIcon/>
                 </IconButton>
-                <AddItemForm addTask={addTaskHandler}/>
+                <AddItemForm addTask={addTaskHandler} disabled={isDisabled}/>
                 <div>
                     {todolistsStatus === 'loading'
                         ? <div style={{textAlign: 'center'}}>
@@ -125,6 +109,12 @@ const Todolist: React.FC<TProps> = props => {
             </div>
         </Paper>
     )
-}
+})
 
-export default React.memo(Todolist)
+//types
+interface IProps {
+    toDoListID: string
+    title: string
+    tasks: Array<ITask>
+    filter: TFilter
+}

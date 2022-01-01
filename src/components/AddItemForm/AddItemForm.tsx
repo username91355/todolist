@@ -1,12 +1,14 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {TextField, Button} from "@mui/material";
 
-type AddItemFormPropsType = {
+interface IProps {
     addTask: (title: string) => void
+    disabled?: boolean
 }
 
-export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
+export const AddItemForm: React.FC<IProps> = React.memo(props => {
 
+    const {addTask, disabled = false} = props
     const [title, setTitle] = useState<string>("")
     const [error, setError] = useState<string | null>(null)
 
@@ -28,7 +30,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if(error) setError(null)
+        if (error) setError(null)
         if (e.key === 'Enter') {
             addItemOnClick()
         }
@@ -46,6 +48,7 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
     return (
         <div style={{display: 'flex', alignItems: 'center'}}>
             <TextField id="outlined-basic"
+                       disabled={disabled}
                        label={error || null}
                        variant="outlined"
                        value={title}
@@ -56,11 +59,9 @@ export const AddItemForm: React.FC<AddItemFormPropsType> = ({addTask}) => {
                        error={!!error}
                        style={textFieldStyle}/>
             <Button onClick={addItemOnClick}
+                    disabled={disabled}
                     variant={"contained"}
                     style={buttonStyle}>Add</Button>
         </div>
     )
-
-}
-
-export default React.memo(AddItemForm)
+})

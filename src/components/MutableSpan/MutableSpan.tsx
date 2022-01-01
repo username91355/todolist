@@ -1,12 +1,8 @@
 import React, {useState, KeyboardEvent, ChangeEvent} from "react";
 
-type MutableSpanType = {
-    title: string
-    onChangeTitle: (title: string) => void
-}
+export const MutableSpan: React.FC<IProps> = React.memo(props => {
 
-const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) => {
-
+    const {title, onChangeTitle, disabled = false} = props
     const [localTitle, setLocalTitle] = useState<string>('')
     const [readingMode, setReadingMode] = useState<boolean>(true)
 
@@ -15,8 +11,12 @@ const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) => {
     }
 
     const onDblClickHandler = () => {
-        setLocalTitle(title)
-        setReadingMode(false)
+        if (disabled) {
+            return
+        } else {
+            setLocalTitle(title)
+            setReadingMode(false)
+        }
     }
 
     const setChangeTitle = () => {
@@ -34,12 +34,18 @@ const MutableSpan: React.FC<MutableSpanType> = ({title, onChangeTitle}) => {
         readingMode
             ? <span onDoubleClick={onDblClickHandler}>{title}</span>
             : <input type="text"
+                     disabled={disabled}
                      value={localTitle}
                      onBlur={setChangeTitle}
                      onChange={onChangeHandler}
                      onKeyPress={setChangeTitleOnKeyPress}
                      autoFocus/>
     )
-}
+})
 
-export default React.memo(MutableSpan)
+//types
+interface IProps {
+    title: string
+    onChangeTitle: (title: string) => void
+    disabled?: boolean
+}

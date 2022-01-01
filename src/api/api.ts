@@ -1,4 +1,5 @@
 import axios from "axios";
+import {ITask, ITodolist} from "../types/types";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1',
@@ -68,27 +69,7 @@ export const todolistAPI = {
 
 }
 
-export interface ITodolist {
-    addedDate: string
-    id: string
-    order: number
-    title: string
-}
-
-export interface ITask {
-    addedDate: string
-    deadline: string | null
-    description: string | null
-    id: string
-    order: number
-    priority: TaskPriorities
-    startDate: string | null
-    status: TaskStatuses
-    title: string
-    todoListId: string
-    completed: boolean
-}
-
+//types
 interface IGetTasksResponse {
     error: string | null
     items: ITask[]

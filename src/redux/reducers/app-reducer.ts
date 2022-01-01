@@ -1,23 +1,34 @@
-const SET_APP_STATUS = 'TODOLIST/APP/SET_APP_STATUS'
+//constants
+const SET_APP_STATUS = 'todolist/app-reducer/SET_APP_STATUS'
+const SET_APP_ERROR = 'todolist/app-reducer/SET_APP_ERROR'
 
-const initialState = {
+//initial state
+const iState = {
     appStatus: 'idle' as RequestStatusType,
-    error: null as string | null
+    appError: null as string | null
 }
 
-export const appReducer = (state: InitialStateType = initialState, action: TAppActions): InitialStateType => {
+//reducer
+export const appReducer = (state: InitialStateType = iState, action: TAppActions): InitialStateType => {
     switch (action.type) {
         case SET_APP_STATUS:
             return {...state, appStatus: action.status}
+        case SET_APP_ERROR:
+            return {...state, appError: action.error}
         default:
             return state
     }
 }
 
-export const setAppStatus = (status: RequestStatusType) => ({type: SET_APP_STATUS, status})
+//action creators
+export const setAppStatus = (status: RequestStatusType) => ({type: SET_APP_STATUS, status} as const)
+export const setAppError = (error: string | null) => ({type: SET_APP_ERROR, error} as const)
 
+//types
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-type InitialStateType = typeof initialState
+export type InitialStateType = typeof iState
 export type TAppActions =
     | TSetAppStatus
+    | TSetAppError
 type TSetAppStatus = ReturnType<typeof setAppStatus>
+type TSetAppError = ReturnType<typeof setAppError>

@@ -2,24 +2,22 @@ import React, {ChangeEvent} from 'react';
 import {Checkbox} from "@mui/material";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import MutableSpan from "../../components/MutableSpan/MutableSpan";
+import {MutableSpan} from "../../components/MutableSpan/MutableSpan";
 import IconButton from "@mui/material/IconButton";
 import ClearIcon from "@mui/icons-material/Clear";
 import {deleteTaskTC, updateTaskTC} from "../../redux/reducers/tasks-reducer";
 import {useDispatch} from "react-redux";
-import {ITask, TaskStatuses} from "../../api/api";
+import {TaskStatuses} from "../../api/api";
+import {ITask} from '../../types/types';
 
 type TProps = {
     task: ITask
     toDoListID: string
 }
 
-const Task: React.FC<TProps> = props => {
+export const Task: React.FC<TProps> = React.memo(props => {
 
-    const {
-        task,
-        toDoListID
-    } = props
+    const {task, toDoListID} = props
 
     const dispatch = useDispatch()
 
@@ -28,7 +26,6 @@ const Task: React.FC<TProps> = props => {
     }
 
     const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
-
         const newTaskStatus = task.status === TaskStatuses.Completed
             ? TaskStatuses.New
             : TaskStatuses.Completed
@@ -59,6 +56,5 @@ const Task: React.FC<TProps> = props => {
             <ClearIcon/>
         </IconButton>
     </div>
-}
+})
 
-export default React.memo(Task);
