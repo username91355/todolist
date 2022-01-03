@@ -1,36 +1,35 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {AppStateType} from "../redux/store";
-import {AddItemForm} from "../components/AddItemForm/AddItemForm";
-import {Todolist} from "../features/ToDoList/Todolist";
 import {Header} from '../components/Header/Header';
-import {Container, Grid, LinearProgress} from "@mui/material";
+import {CircularProgress, Container, LinearProgress} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {RequestStatusType} from "../redux/reducers/app-reducer";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {IStateTasks} from "../redux/reducers/tasks-reducer";
-import {
-    createTodolistTC,
-    getTodolistsTC,
-    ITodolistWithFilter,
-} from "../redux/reducers/todolists-reducer";
+import {TodolistList} from "../features/ToDoList/TodolistList";
+import {Route, Routes, useNavigate} from 'react-router-dom';
+import {Login} from "../features/login/Login";
+import {authMe} from "../redux/reducers/auth-reducer";
 
 export const App: React.FC = () => {
 
     const
-        todolists = useSelector<AppStateType, ITodolistWithFilter[]>(state => state.todolist.todolists),
+        appInit = useSelector((state: AppStateType) => state.auth.appInit),
+        isAuth = useSelector((state: AppStateType) => state.auth.isAuth),
         appStatus = useSelector<AppStateType, RequestStatusType>(state => state.app.appStatus),
         appError = useSelector<AppStateType, string | null>(state => state.app.appError),
-        tasks = useSelector<AppStateType, IStateTasks>(state => state.tasks),
-        dispatch = useDispatch();
+        navigate = useNavigate(),
+        dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getTodolistsTC())
+        dispatch(authMe())
     }, [dispatch])
 
-    const addToDoList = useCallback((title: string) => {
-        dispatch(createTodolistTC(title))
-    }, [dispatch])
+    useEffect(() => {
+        if (appInit && !isAuth) {
+            navigate('/login')
+        }
+    }, [appInit, isAuth, navigate])
 
     return (
         <div className={'app__wrapper'}>
@@ -40,25 +39,22 @@ export const App: React.FC = () => {
                 ? <LinearProgress/>
                 : <div style={{height: '6px'}}/>}
             <Container>
-                <Grid container>
-                    <Grid item xs={12}>
-                        <AddItemForm addTask={addToDoList}/>
-                    </Grid>
-                    <Grid container spacing={3}>
-                        {todolists.map(t => {
-                            return (
-                                <Grid key={t.id} item xs={4} style={{minWidth: '300px'}}>
-                                    <Todolist key={t.id}
-                                              tasks={tasks[t.id]}
-                                              toDoListID={t.id}
-                                              title={t.title}
-                                              filter={t.filter}
-                                    />
-                                </Grid>
-                            )
-                        })}
-                    </Grid>
-                </Grid>
+                {appInit
+                    ? <Routes>
+                        <Route path='/'
+                               element={<TodolistList/>}/>
+                        <Route path='/login' element={<Login/>}/>
+                        <Route path='*' element={<div><ErrorSnackbar error={'Page not found'}/></div>}/>
+                    </Routes>
+                    : <div style={{
+                        display: 'flex',
+                        minHeight: '100vh',
+                        alignItems: 'center',
+                        justifyContent: 'space-around'
+                    }}>
+                        <CircularProgress/>
+                    </div>
+                }
             </Container>
         </div>
     );

@@ -33,6 +33,7 @@ describe('Todolist reducer', () => {
         expect(result.todolists.length).toBe(2)
         expect(result.todolists[0]).toEqual({...testNewTodolist, filter: 'all'})
         expect(result).not.toEqual(testState)
+        expect(result).not.toBe(testState)
     })
 
     it('Set all to do lists', () => {
@@ -45,6 +46,7 @@ describe('Todolist reducer', () => {
         expect(result.todolists.length).toBe(1)
         expect(result.todolists[0]).toEqual(testState.todolists[0])
         expect(result).not.toEqual(startState)
+        expect(result).not.toBe(testState)
     })
 
     it('Change to do list title', () => {
@@ -53,6 +55,7 @@ describe('Todolist reducer', () => {
         expect(result.todolists.length).toBe(1)
         expect(result.todolists[0].title).toBe('New title')
         expect(result).not.toEqual(testState)
+        expect(result).not.toBe(testState)
     })
 
     it('Remove to do list', () => {
@@ -61,6 +64,7 @@ describe('Todolist reducer', () => {
         expect(result.todolists.length).toBe(0)
         expect(result.todolists.find(el => el.id === 'testState_ID')).toBeUndefined()
         expect(result).not.toEqual(testState)
+        expect(result).not.toBe(testState)
     })
 
     it('Change to do list filter status', () => {
@@ -69,6 +73,7 @@ describe('Todolist reducer', () => {
         expect(result.todolists.length).toBe(1)
         expect(result.todolists[0].filter).toBe('active')
         expect(result).not.toEqual(testState)
+        expect(result).not.toBe(testState)
     })
 
     it('Change to do list status', () => {
@@ -76,6 +81,7 @@ describe('Todolist reducer', () => {
 
         expect(result.todolistsStatus).toBe('loading')
         expect(result).not.toEqual(testState)
+        expect(result).not.toBe(testState)
     })
 
 })

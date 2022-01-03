@@ -11,35 +11,35 @@ const instance = axios.create({
 
 export const todolistAPI = {
 
-    createTodolist(title: string) {
+    createTodolist(title: string): Promise<IResponse<{ item: ITodolist }>> {
         return instance
             .post<IResponse<{ item: ITodolist }>>('/todo-lists', {title})
             .then(response => response.data)
             .catch(err => err)
     },
 
-    getTodolists() {
+    getTodolists(): Promise<Array<ITodolist>> {
         return instance
             .get<Array<ITodolist>>('/todo-lists')
             .then(response => response.data)
             .catch(err => err)
     },
 
-    updateTodolistTitle(todolistId: string, title: string) {
+    updateTodolistTitle(todolistId: string, title: string): Promise<IResponse> {
         return instance
             .put<IResponse>(`/todo-lists/${todolistId}`, {title})
             .then(response => response.data)
             .catch(err => err)
     },
 
-    deleteTodolist(todolistId: string) {
+    deleteTodolist(todolistId: string): Promise<IResponse> {
         return instance
             .delete<IResponse>(`/todo-lists/${todolistId}`)
             .then(response => response.data)
             .catch(err => err)
     },
 
-    createTask(todolistId: string, title: string) {
+    createTask(todolistId: string, title: string): Promise<IResponse<{ item: ITask }>> {
         return instance
             .post<IResponse<{ item: ITask }>>(`/todo-lists/${todolistId}/tasks`, {title})
             .then(response => response.data)
@@ -53,20 +53,41 @@ export const todolistAPI = {
             .catch(err => err)
     },
 
-    updateTask(todolistId: string, task: ITask) {
+    updateTask(todolistId: string, task: ITask): Promise<IResponse<{ item: ITask }>> {
         return instance
             .put<IResponse<{ item: ITask }>>(`/todo-lists/${todolistId}/tasks/${task.id}`, {...task})
             .then(response => response.data)
             .catch(err => err)
     },
 
-    deleteTask(todolistId: string, taskId: string) {
+    deleteTask(todolistId: string, taskId: string): Promise<IResponse> {
         return instance
             .delete<IResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
             .then(response => response.data)
             .catch(err => err)
     },
 
+}
+
+export const authAPI = {
+    me(): Promise<IResponse<IUser>> {
+        return instance
+            .get<IResponse<IUser>>('/auth/me')
+            .then(response => response.data)
+            .catch(err => err)
+    },
+    login(email:string, password: string, rememberMe: boolean): Promise<IResponse<{userId: number}>> {
+        return instance
+            .post<IResponse<{userId: number}>>('/auth/login', {email,password,rememberMe})
+            .then(response => response.data)
+            .catch(err => err)
+    },
+    logout(): Promise<IResponse> {
+        return instance
+            .delete<IResponse>('/auth/login')
+            .then(response => response.data)
+            .catch(err => err)
+    }
 }
 
 //types
@@ -81,6 +102,12 @@ interface IResponse<T = {}> {
     messages: Array<string>
     fieldsErrors: Array<string>
     data: T
+}
+
+interface IUser {
+    id: number
+    email: string
+    login: string
 }
 
 export enum TaskStatuses {

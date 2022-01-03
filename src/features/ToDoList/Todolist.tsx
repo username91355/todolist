@@ -23,31 +23,31 @@ export const Todolist: React.FC<IProps> = React.memo(props => {
 
     const
         dispatch = useDispatch(),
+        isAuth = useSelector((state: AppStateType) => state.auth.isAuth),
         todolistsStatus = useSelector((state: AppStateType) => state.todolist.todolistsStatus),
         isDisabled = todolistsStatus === 'loading'
 
-
     useEffect(() => {
         dispatch(getTasksTC(toDoListID))
-    }, [dispatch, toDoListID])
+    }, [dispatch, toDoListID, isAuth])
 
     //Work with todolist`s
     const changeTitle = useCallback((title: string) => {
         dispatch(updateTodolistTitleTC(toDoListID, title))
-    }, [dispatch,toDoListID])
+    }, [dispatch, toDoListID])
 
     const addTaskHandler = useCallback((title: string) => {
         dispatch(createTaskTC(toDoListID, title))
-    }, [dispatch,toDoListID])
+    }, [dispatch, toDoListID])
 
     const removeToDoListHandler = useCallback(() => {
         dispatch(deleteTodolistTC(toDoListID))
-    }, [dispatch,toDoListID])
+    }, [dispatch, toDoListID])
 
     //Filter tasks
     const setTodolistFilterStatus = useCallback((id: string, status: TFilter) => {
         dispatch(setTodolistFilterStatusAC(id, status))
-    },[dispatch])
+    }, [dispatch])
 
     const onAllClickHandler = useCallback(() => setTodolistFilterStatus(toDoListID, "all"),
         [setTodolistFilterStatus, toDoListID])

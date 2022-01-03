@@ -11,6 +11,7 @@ describe('App reducer', () => {
         expect(result.appStatus).toBe('loading')
         expect(result.appError).toBeNull()
         expect(result).not.toEqual(testState)
+        expect(result).not.toBe(testState)
     })
 
     it('Set app error', () => {
@@ -19,5 +20,6 @@ describe('App reducer', () => {
         expect(result.appStatus).toBe('idle')
         expect(result.appError).toBe('error')
         expect(result).not.toEqual(testState)
+        expect(result).not.toBe(testState)
     })
 })
