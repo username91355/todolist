@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
-import {Grid} from "@mui/material";
+import styles from './Todolist.module.css';
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist";
 import {createTodolistTC, getTodolistsTC, ITodolistWithFilter} from "../../redux/reducers/todolists-reducer";
@@ -34,24 +34,21 @@ export const TodolistList: React.FC = () => {
     }, [dispatch])
 
     return (
-        <Grid container>
-            <Grid item xs={12}>
-                <AddItemForm addTask={addToDoList}/>
-            </Grid>
-            <Grid container spacing={3}>
+        <div className={styles.todolist__container}>
+            <AddItemForm addTask={addToDoList}/>
+            <div className={styles.todolist__todolists}>
                 {todolists.map(t => {
                     return (
-                        <Grid key={t.id} item xs={4} style={{minWidth: '300px'}}>
-                            <Todolist key={t.id}
-                                      tasks={tasks[t.id]}
-                                      toDoListID={t.id}
-                                      title={t.title}
-                                      filter={t.filter}
-                            />
-                        </Grid>
+                        <Todolist key={t.id}
+                                  tasks={tasks[t.id]}
+                                  toDoListID={t.id}
+                                  title={t.title}
+                                  filter={t.filter}
+                        />
+
                     )
                 })}
-            </Grid>
-        </Grid>
+            </div>
+        </div>
     );
 };

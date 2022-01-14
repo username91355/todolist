@@ -35,7 +35,7 @@ export const Header: React.FC = React.memo(() => {
                     <Typography variant="h5"
                                 component="div"
                                 sx={{flexGrow: 1}}>
-                        To Do List
+                        My to do
                     </Typography>
                     {isAuth
                         ? <div style={{display: 'flex', alignItems: 'center'}}>

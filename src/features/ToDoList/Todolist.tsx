@@ -10,6 +10,7 @@ import {Task} from '../Task/Task';
 import {TaskStatuses} from "../../api/api";
 import {AppStateType} from "../../redux/store";
 import {ITask} from "../../types/types";
+import styles from './Todolist.module.css'
 import {
     deleteTodolistTC,
     setTodolistFilterStatusAC,
@@ -69,45 +70,50 @@ export const Todolist: React.FC<IProps> = React.memo(props => {
     }
 
     return (
-        <Paper elevation={5}>
-            <div style={{padding: '10px'}}>
-                <MutableSpan title={title}
-                             disabled={isDisabled}
-                             onChangeTitle={changeTitle}/>
-                <IconButton onClick={removeToDoListHandler} disabled={isDisabled}>
-                    <DeleteIcon/>
-                </IconButton>
-                <AddItemForm addTask={addTaskHandler} disabled={isDisabled}/>
-                <div>
-                    {todolistsStatus === 'loading'
-                        ? <div style={{textAlign: 'center'}}>
-                            <CircularProgress/>
-                        </div>
-                        : filteredTasks.map(t => {
-                            return <Task
-                                key={t.id}
-                                task={t}
-                                toDoListID={toDoListID}
-                            />
-                        })
-                    }
+        <div>
+            <Paper elevation={5} style={{maxWidth: '320px'}}>
+                <div className={styles.todo__wrapper}>
+                    <div>
+                        <MutableSpan title={title}
+                                     disabled={isDisabled}
+                                     onChangeTitle={changeTitle}/>
+                        <IconButton onClick={removeToDoListHandler} disabled={isDisabled}>
+                            <DeleteIcon/>
+                        </IconButton>
+                    </div>
+                    <AddItemForm addTask={addTaskHandler} disabled={isDisabled}/>
+                    <div>
+                        {todolistsStatus === 'loading'
+                            ? <div style={{textAlign: 'center'}}>
+                                <CircularProgress/>
+                            </div>
+                            : filteredTasks.map(t => {
+                                return <Task
+                                    key={t.id}
+                                    task={t}
+                                    toDoListID={toDoListID}
+                                />
+                            })
+                        }
+                    </div>
+                    <hr/>
+                    <div className={styles.todo__buttons}>
+                        <Button
+                            variant={filter === 'all' ? "contained" : "outlined"}
+                            onClick={onAllClickHandler}
+                            size={'small'}>All</Button>
+                        <Button
+                            variant={filter === 'active' ? "contained" : "outlined"}
+                            onClick={onActiveClickHandler}
+                            size={'small'}>Active</Button>
+                        <Button
+                            variant={filter === 'completed' ? "contained" : "outlined"}
+                            onClick={onCompletedClickHandler}
+                            size={'small'}>Completed</Button>
+                    </div>
                 </div>
-                <div>
-                    <Button
-                        variant={filter === 'all' ? "contained" : "outlined"}
-                        onClick={onAllClickHandler}
-                        size={'small'}>All</Button>
-                    <Button
-                        variant={filter === 'active' ? "contained" : "outlined"}
-                        onClick={onActiveClickHandler}
-                        size={'small'}>Active</Button>
-                    <Button
-                        variant={filter === 'completed' ? "contained" : "outlined"}
-                        onClick={onCompletedClickHandler}
-                        size={'small'}>Completed</Button>
-                </div>
-            </div>
-        </Paper>
+            </Paper>
+        </div>
     )
 })
 

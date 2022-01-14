@@ -1,0 +1,47 @@
+.todolist__container {
+    width: 80%;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+.todolist__todolists {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 10px;
+}
+
+@media screen and (max-width: 1600px) {
+    .todolist__todolists {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .todolist__todolists {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .todolist__container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .todolist__todolists {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+
+.todo__wrapper {
+    padding: 10px;
+}
+
+.todo__buttons {
+    display: flex;
+    justify-content: space-around;
+}

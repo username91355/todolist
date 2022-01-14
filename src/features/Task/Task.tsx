@@ -9,6 +9,7 @@ import {deleteTaskTC, updateTaskTC} from "../../redux/reducers/tasks-reducer";
 import {useDispatch} from "react-redux";
 import {TaskStatuses} from "../../api/api";
 import {ITask} from '../../types/types';
+import styles from './Task.module.css'
 
 type TProps = {
     task: ITask
@@ -44,7 +45,7 @@ export const Task: React.FC<TProps> = React.memo(props => {
         }))
     }
 
-    return <div>
+    return <div className={styles.task__wrapper}>
         <Checkbox
             onChange={changeTaskStatus}
             checked={task.status === 2}
@@ -52,7 +53,7 @@ export const Task: React.FC<TProps> = React.memo(props => {
             checkedIcon={<BookmarkIcon/>}
         />
         <MutableSpan title={task.title} onChangeTitle={changeTaskTitle}/>
-        <IconButton onClick={removeTaskOnTask}>
+        <IconButton onClick={removeTaskOnTask} style={{marginLeft: 'auto'}}>
             <ClearIcon/>
         </IconButton>
     </div>

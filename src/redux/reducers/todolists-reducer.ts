@@ -107,7 +107,7 @@ export const getTodolistsTC = (): ThunkType => async dispatch => {
 
         const data = await todolistAPI.getTodolists()
 
-        if (data.length) {
+        if (data) {
             dispatch(setTodolistsAC(data))
             dispatch(setAppStatus('succeeded'))
         } else {

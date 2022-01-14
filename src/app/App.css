@@ -1,4 +1,7 @@
 .app__wrapper {
     background-color: lightgray;
-    min-height: 100vh;
+}
+
+.app__container {
+    min-height: 90vh;
 }

@@ -1,0 +1,29 @@
+.footer_wrapper {
+    min-height: 10vh;
+    background-color: #1e7fe0;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+    font-size: 12px;
+    color: white;
+}
+.footer_container {
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer_boxs {
+    width: 100%;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer_boxs > a {
+    color: white;
+}
+
+.footer_boxs > a:hover {
+    color: lightgray;
+}

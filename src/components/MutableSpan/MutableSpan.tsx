@@ -32,7 +32,7 @@ export const MutableSpan: React.FC<IProps> = React.memo(props => {
 
     return (
         readingMode
-            ? <span onDoubleClick={onDblClickHandler}>{title}</span>
+            ? <span onDoubleClick={onDblClickHandler} >{title}</span>
             : <input type="text"
                      disabled={disabled}
                      value={localTitle}
